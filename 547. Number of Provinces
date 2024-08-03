@@ -1,0 +1,44 @@
+Approach : dfs
+Time complexity : O(n + 2E)
+Space complexity : O(n)
+
+class Solution {
+    public void dfs(int node, int[] vis, ArrayList<ArrayList<Integer>> adj){
+        vis[node] = 1;
+
+        for(Integer it : adj.get(node)) {
+            if(vis[it] == 0){
+                dfs(it,vis,adj);
+            }
+        }
+    }
+    public int findCircleNum(int[][] matrix) {
+        int V = matrix.length;
+
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
+
+        for(int i=0;i<V;i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for(int i=0;i<V;i++) {
+            for(int j=0;j<V;j++) {
+                if(matrix[i][j] == 1 && i != j) {
+                    adj.get(i).add(j);
+                    adj.get(j).add(i);
+                } 
+            }
+        }
+
+        int[] vis = new int[V];
+
+        int provinces = 0;
+        for(int i=0;i<V;i++) {
+            if(vis[i] == 0){
+                provinces++;
+                dfs(i,vis,adj);
+            }
+        }
+        return provinces;
+    }
+}
