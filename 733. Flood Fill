@@ -1,0 +1,28 @@
+Apporach : DFS
+Time complexity : O(n*m)
+Space complexity : O(n*m)
+
+class Solution {
+    public void dfs(int sr, int sc, int ini, int newcolor,int[][] res, int[][] image){
+        res[sr][sc] = newcolor;
+        int n = res.length;
+        int m = res[0].length;
+
+        int[][] direction = {{-1,0},{0,1},{1,0},{0,-1}};
+
+        for(int i=0;i<4;i++) {
+            int nR = sr + direction[i][0];
+            int nc = sc + direction[i][1];
+
+            if(nR >= 0  && nR < n && nc >= 0 && nc < m && image[nR][nc] == ini && res[nR][nc] != newcolor) {
+                dfs(nR, nc, ini, newcolor, res, image);
+            }
+        }
+    }
+    public int[][] floodFill(int[][] image, int sr, int sc, int color) {
+        int[][] res = image;
+        int initcolor = image[sr][sc];
+        dfs(sr,sc,initcolor, color,res, image);
+        return res;
+    }
+}
