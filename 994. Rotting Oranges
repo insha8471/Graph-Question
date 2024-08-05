@@ -1,0 +1,61 @@
+Approach : BFS
+Time complexity : O(n*m)
+Space complexity : O(n*m)
+
+
+class Pair {
+    int row;
+    int col;
+    int tm;
+    Pair(int _row, int _col, int _tm) {
+        this.row = _row; this.col=_col; this.tm = _tm;
+    }
+}
+class Solution {
+    
+    public int orangesRotting(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        Queue<Pair> pq = new LinkedList<>();
+        int[][] vis = new int[n][m];
+        int cntFresh = 0;
+
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++) {
+                if(grid[i][j] == 2){
+                    pq.add(new Pair(i,j,0));
+                    vis[i][j] = 2;
+                }else{
+                    vis[i][j] = 0;
+                }
+                if(grid[i][j] == 1) cntFresh++;
+            }
+        }
+
+        int tm = 0;
+        int cnt = 0;
+        int[][] dir = {{0,1},{0,-1},{1,0},{-1,0}};
+
+        while(!pq.isEmpty()) {
+            int row = pq.peek().row;
+            int col = pq.peek().col;
+            int t = pq.peek().tm;
+            tm = Math.max(tm ,t);
+            pq.remove();
+
+            for(int i=0;i<4;i++) {
+                int row_ = row+ dir[i][0];
+                int col_ = col + dir[i][1];
+
+                if(row_ >= 0 && row_ < n && col_ >= 0 && col_ < m && vis[row_][col_] == 0 && grid[row_][col_] == 1){
+                    pq.add(new Pair(row_, col_, t+1));
+                    vis[row_][col_] = 2;
+                    cnt++;
+                }
+            }
+        }
+        if(cntFresh != cnt) return -1;
+        return tm;
+        
+    }
+}
