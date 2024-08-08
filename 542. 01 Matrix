@@ -1,0 +1,60 @@
+Approach : BFS
+Time complexity : O(n*m)
+Space complexity : O(n*m)
+
+class Pair {
+    int row; int col; int step;
+
+    Pair(int row,int col,int step) {
+        this.row = row;
+        this.col = col;
+        this.step = step;
+    }
+}
+
+class Solution {
+    public void nearestZero(int[][] mat, int[][] vis, int[][] res, Queue<Pair> q){
+        int[][] dir = {{-1,0},{0,1},{1,0},{0,-1}};
+        int n = mat.length;
+        int m = mat[0].length;
+        while(!q.isEmpty()) {
+            int row = q.peek().row;
+            int col = q.peek().col;
+            int step = q.peek().step;
+            q.remove();
+
+            res[row][col] = step;
+            for(int i=0;i<4;i++) {
+                int nrow = row + dir[i][0];
+                int ncol = col + dir[i][1];
+
+                if(nrow >= 0 && nrow < n && ncol >= 0 && ncol < m && vis[nrow][ncol] == 0) {
+                    vis[nrow][ncol] = 1;
+                    q.add(new Pair(nrow, ncol, step+1));
+                }
+            }
+        }
+    }
+    public int[][] updateMatrix(int[][] mat) {
+        int n = mat.length;
+        int m = mat[0].length;
+
+        int[][] result = new int[n][m];
+
+        int[][] vis = new int[n][m];
+        Queue<Pair> q = new LinkedList<>();
+        
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++) {
+                if(mat[i][j] == 0) {
+                    q.add(new Pair(i,j,0));
+                    vis[i][j] = 1;
+                }
+            }
+        }
+
+        nearestZero(mat,vis,result,q);
+
+        return result;
+    }
+}
