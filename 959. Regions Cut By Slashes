@@ -1,6 +1,6 @@
 Approach : BFS
-Time complexity : O(n*m)
-Space complexity  : O(n*m)
+Time complexity : O(n^2)
+Space complexity  : O(n^2)
 
 
 class Pair{
