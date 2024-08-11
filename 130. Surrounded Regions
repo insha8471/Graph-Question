@@ -1,0 +1,42 @@
+Approach : DFS
+Time complexity : O(n*m)
+Space complexity : O(n*m)
+
+class Solution {
+    public void dfs(int r,int c,char[][] board, int[][] vis, int n, int m){
+        vis[r][c] = 1;
+
+        int[][] directions = {{0,1},{1,0},{0,-1},{-1,0}};
+
+        for(int i=0;i<4;i++) {
+            int _r = r+directions[i][0];
+            int _c = c+ directions[i][1];
+
+            if(_r >= 0 && _r<n && _c >= 0 && _c < m && vis[_r][_c] == 0 && board[_r][_c] == 'O') {
+                dfs(_r,_c,board,vis,n,m);
+            }
+        }
+    }
+    public void solve(char[][] board) {
+        int n = board.length;
+        int m = board[0].length;
+
+        int[][] vis = new int[n][m];
+
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++){
+                if(board[i][j] == 'O' && (i==0 || j==0 || i==n-1 || j==m-1)){
+                    dfs(i,j,board, vis, n,m);
+                }
+            }
+        }
+
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++) {
+                if(board[i][j] == 'O' && vis[i][j] == 0){
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+}
