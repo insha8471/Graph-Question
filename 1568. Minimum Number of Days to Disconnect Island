@@ -1,0 +1,59 @@
+Approach : DFS
+Time complexity : O((n*m)^2)
+Space complexity : O(n*m)
+
+class Solution {
+    public void DFS(int r, int c, int[][] vis, int[][] grid) {
+        vis[r][c] = 1;
+        int[][] directions = {{0,1},{1,0},{0,-1},{-1,0}};
+        for(int i=0;i<4;i++) {
+            int _r = r + directions[i][0];
+            int _c = c + directions[i][1];
+
+            if(_r >= 0 && _r < grid.length && _c >= 0 && _c < grid[0].length && vis[_r][_c] == 0 && grid[_r][_c] == 1){
+                DFS(_r , _c, vis, grid);
+            }
+        }
+    }
+    public int numberIsland(int[][] grid, int n, int m) {
+        int[][] vis = new int[n][m];
+
+        int isLand = 0;
+
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++) {
+                if(vis[i][j] == 0 && grid[i][j] == 1){
+                    DFS(i,j,vis,grid);
+                    isLand++;
+                }
+            }
+        }
+        return isLand;
+    }
+    public int minDays(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+
+        int isLand = numberIsland(grid, n , m);
+
+        if(isLand == 0 || isLand > 1){
+            return 0;
+        }
+
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++) {
+                if(grid[i][j] == 1){
+                    grid[i][j] = 0;
+                    isLand = numberIsland(grid,n,m);
+
+                    grid[i][j] = 1;
+
+                    if(isLand > 1 || isLand == 0){
+                        return 1;
+                    }
+                }
+            }
+        }
+        return 2;
+    }
+}
