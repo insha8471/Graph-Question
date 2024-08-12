@@ -1,0 +1,43 @@
+Approach : DFS
+Time complexity : O(n*m)
+Space complexity : O(n*m)
+
+class Solution {
+    public void dfs(int r, int c, int[][] grid, int[][] vis) {
+        vis[r][c] = 1;
+
+        int[][] directions = {{0,1},{1,0},{0,-1},{-1,0}};
+        for(int i=0;i<4;i++) {
+            int _r = r + directions[i][0];
+            int _c = c + directions[i][1];
+
+            if(_r >= 0 && _r < grid.length && _c >= 0 && _c < grid[0].length && vis[_r][_c] == 0 && grid[_r][_c] == 1){
+                dfs(_r,_c,grid,vis);
+            }
+        }
+    }
+    public int numEnclaves(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+
+        int[][] vis = new int[n][m];
+
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++) {
+                if(grid[i][j] == 1 && (i==0 || i==n-1 || j==0 || j==m-1) && vis[i][j]==0){
+                    dfs(i,j,grid,vis);
+                }
+            }
+        }
+
+        int result = 0;
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++) {
+                if(grid[i][j] == 1 && vis[i][j] == 0){
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+}
