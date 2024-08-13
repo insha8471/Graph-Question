@@ -1,0 +1,43 @@
+Approach : DFS
+Time complexity : O(n*m)
+Space complexity : O(n*m)
+
+class Solution {
+    private void dfs(int r,int c, int[][] vis, int[][] grid, List<String> ls, int row0,int col0 ){
+        vis[r][c] = 1;
+        ls.add(toString(r-row0, c-col0));
+        int[][] directions = {{0,1},{1,0},{0,-1},{-1,0}};
+        
+        for(int i=0;i<4;i++) {
+            int nrow = r + directions[i][0];
+            int ncol = c + directions[i][1];
+            
+            if(nrow >= 0 && nrow < grid.length && ncol >= 0 && 
+            ncol < grid[0].length && vis[nrow][ncol] == 0 &&
+            grid[nrow][ncol] == 1) {
+                dfs(nrow,ncol,vis,grid,ls,row0,col0);
+            }
+        }
+        
+    }
+    private String toString(int r, int c) {
+        return Integer.toString(r) + " " + Integer.toString(c);
+    }
+    int countDistinctIslands(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        
+        int[][] vis = new int[n][m];
+        HashSet<List<String>> st = new HashSet<>();
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<m;j++){
+                if(vis[i][j] == 0 && grid[i][j] == 1) {
+                    List<String> ls = new ArrayList<>();
+                    dfs(i,j,vis, grid, ls,i,j);
+                    st.add(ls);
+                }
+            }
+        }
+        return st.size();
+    }
+}
