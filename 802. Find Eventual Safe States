@@ -1,0 +1,46 @@
+Approach : DFS
+Time complexity : O(v + E)
+Space complexity : O(V)
+
+class Solution {
+    public boolean dfs(int start, int[][] graph, int[] vis, int[] pathVis, int[] check) {
+        vis[start] = 1;
+        pathVis[start] = 1;
+        check[start] = 0;
+
+        for(int it : graph[start]){
+            if(vis[it] == 0){
+                if(dfs(it, graph, vis, pathVis, check)) {
+                    return true;
+                }
+            }else if(pathVis[it] == 1){
+                return true;
+            }
+        }
+
+        pathVis[start] = 0;
+        check[start] = 1;
+        return false;
+    }
+    public List<Integer> eventualSafeNodes(int[][] graph) {
+        int n = graph.length;
+
+        int[] vis = new int[n];
+        int[] pathVis =  new int[n];
+        int[] check = new int[n];
+
+        for(int i=0;i<n;i++) {
+            if(vis[i] == 0) {
+                dfs(i, graph, vis, pathVis, check);
+            }
+        }
+
+        ArrayList<Integer> res = new ArrayList<>();
+        for(int i=0;i<n;i++) {
+            if(check[i] == 1) {
+                res.add(i);
+            }
+        }
+        return res;
+    }
+}
