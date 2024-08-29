@@ -1,0 +1,33 @@
+Approach : DFS
+Time complexity : O(n^2)
+Space complexity : O(n)
+
+
+class Solution {
+    public void dfs(int idx, int[] vis, int[][] stones) {
+        vis[idx] = 1;
+
+        for(int i=0;i<stones.length;i++) {
+            int r = stones[idx][0];
+            int c = stones[idx][1];
+
+            if(vis[i] == 0 && (stones[i][0] == r || stones[i][1] == c)){
+                dfs(i, vis, stones);
+            }
+        }
+    }
+    public int removeStones(int[][] stones) {
+        int n = stones.length;
+        int grp = 0;
+
+        int[] vis = new int[n];
+        
+        for(int i=0;i<n;i++) {
+            if(vis[i] == 1) continue;
+
+            dfs(i,vis, stones);
+            grp++;
+        }
+        return n-grp;
+    }
+}
