@@ -1,0 +1,54 @@
+Approach : Dijkstra Algorithm
+Time complexity : O(k*m) // k is maximum allowed stop and m is number of flights
+
+class Tuple{
+    int first;
+    int second;
+    int third;
+
+    Tuple(int first, int second, int third) {
+        this.first = first;
+        this.second = second;
+        this.third = third;
+    }
+}
+class Solution {
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        ArrayList<ArrayList<Pair<Integer, Integer>>> adj = new ArrayList<>();
+
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+        }
+
+        for(int i=0;i<flights.length;i++) {
+            adj.get(flights[i][0]).add(new Pair<>(flights[i][1],flights[i][2]));
+        }
+
+        Queue<Tuple> q = new LinkedList<>();
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+        q.add(new Tuple(src,0,0));
+
+        while(!q.isEmpty()) {
+            int node = q.peek().first;
+            int weight = q.peek().second;
+            int currK = q.peek().third;
+            q.remove();
+
+            if(currK > k) continue;
+
+            for(Pair<Integer,Integer> pair : adj.get(node)) {
+                int adjNode = pair.getKey();
+                int adjWeight = pair.getValue();
+
+                if(adjWeight+weight < dist[adjNode] && currK <= k) {
+                    q.add(new Tuple(adjNode, adjWeight+weight, currK+1));
+                    dist[adjNode] = adjWeight+weight;
+                }
+            }
+        }
+
+        return dist[dst] == Integer.MAX_VALUE ? -1 : dist[dst];
+    }
+}
