@@ -1,0 +1,46 @@
+Approach : Dijkstra Algo
+Time complexity  :O(ElogV)
+Space complexity : O(E + V)
+
+class Solution {
+    public int networkDelayTime(int[][] times, int n, int k) {
+        ArrayList<ArrayList<Pair<Integer,Integer>>> adj = new ArrayList<>();
+        for(int i=0;i<=n;i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for(int[] t : times) {
+            adj.get(t[0]).add(new Pair<>(t[1], t[2]));
+        }
+
+        PriorityQueue<Pair<Integer,Integer>> pq = new PriorityQueue<>((a,b) -> a.getKey()-b.getKey());
+        int[] dist = new int[n+1];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+
+        dist[k] = 0;
+        pq.add(new Pair<>(k,0));
+
+        while(!pq.isEmpty()) {
+            int node = pq.peek().getKey();
+            int time = pq.peek().getValue();
+            pq.remove();
+
+            for(Pair<Integer,Integer> it : adj.get(node)) {
+                int adjNode = it.getKey();
+                int adjTime = it.getValue();
+
+                if(time + adjTime < dist[adjNode]) {
+                    dist[adjNode] = time + adjTime;
+                    pq.add(new Pair<>(adjNode, time+adjTime));
+                }
+            }
+        }
+
+        int val = dist[1];
+        for(int i=2;i<=n;i++) {
+            val  = Math.max(val, dist[i]);
+        }
+
+        return val == Integer.MAX_VALUE ? -1 : val;
+    }
+}
