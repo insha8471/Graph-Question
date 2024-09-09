@@ -1,0 +1,50 @@
+Approach : Floyd Warshal Algo
+Time complexity : O(n^3)
+
+class Solution {
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+        int[][] dist = new int[n][n];
+
+        for(int[] d : dist) {
+            Arrays.fill(d, Integer.MAX_VALUE);
+        }
+
+        for(int i=0;i<n;i++) dist[i][i] = 0;
+
+        for(int[] e : edges) {
+            int u = e[0];
+            int v = e[1];
+            int wt = e[2];
+
+            dist[u][v] = wt;
+            dist[v][u] = wt;
+        }
+
+        for(int v=0;v<n;v++){
+            for(int i=0;i<n;i++) {
+                for(int j=0;j<n;j++) {
+                    if(dist[i][v] == Integer.MAX_VALUE || dist[v][j] == Integer.MAX_VALUE)
+                        continue;
+                    dist[i][j] = Math.min(dist[i][j], dist[i][v]+dist[v][j]);
+                }
+            }
+        }
+
+        int citycnt = Integer.MAX_VALUE;
+        int cityNo = -1;
+
+        for(int i=0;i<n;i++) {
+            int cnt = 0;
+            for(int j=0;j<n;j++) {
+                if(dist[i][j] <= distanceThreshold) {
+                    cnt++;
+                }
+            }
+            if(cnt <= citycnt) {
+                cityNo = i;
+                citycnt = cnt;
+            }
+        }
+        return cityNo;
+    }
+}
